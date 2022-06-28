@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
-import Login from "./components/Login";
-import Shell from "./components/Shell";
+import Login from "./components/auth/Login";
+import Shell from "./components/shell/Shell";
 
 const App = () => {
   const { adminInfo } = useAuth();
@@ -24,6 +24,14 @@ const App = () => {
       />
       <Route
         path="/dashboard"
+        element={adminInfo ? <Shell /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/users"
+        element={adminInfo ? <Shell /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/settings"
         element={adminInfo ? <Shell /> : <Navigate to="/login" replace />}
       />
     </Routes>

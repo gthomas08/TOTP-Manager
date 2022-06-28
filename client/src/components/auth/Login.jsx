@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "@mantine/hooks";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import {
   Space,
   Alert,
@@ -12,7 +12,7 @@ import {
   Container,
   Button,
 } from "@mantine/core";
-import loginService from "../services/login";
+import loginService from "../../services/login";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -80,10 +80,10 @@ const Login = () => {
             />
 
             {errorMessage && (
-              <>
+              <div>
                 <Space h="lg" />
                 <Alert color="red">{`${errorMessage}`}</Alert>
-              </>
+              </div>
             )}
 
             <Button type="submit" fullWidth mt="xl">
