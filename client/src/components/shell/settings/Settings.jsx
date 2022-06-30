@@ -5,6 +5,8 @@ import {
   Input,
   InputWrapper,
   Popover,
+  Tooltip,
+  Space,
 } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { Copy } from "tabler-icons-react";
@@ -17,21 +19,35 @@ const Settings = () => {
   const [opened, setOpened] = useState(false);
   const [clientID, setClientID] = useState("");
   const [clientSecret, setClientSecret] = useState("");
+  const [forceUseEffect, setForceUseEffect] = useState(false);
   const { adminInfo } = useAuth();
-  const clipboard = useClipboard();
+  const clipboardID = useClipboard();
+  const clipboardSecret = useClipboard();
 
   useEffect(() => {
     applicationService.info(adminInfo?.token).then((response) => {
       setClientID(response.clientID);
       setClientSecret(response.clientSecret);
     });
-  }, [adminInfo?.token]);
+  }, [adminInfo?.token, forceUseEffect]);
 
   const toHiddenString = (secret) => {
-    const secretLength = secret.length;
-    const hiddenString = bulletChar.repeat(secretLength);
+    if (secret.length > 0) {
+      const visibleCharsLength = 6;
+      const visibleChars = secret.substr(secret.length - visibleCharsLength);
+      const secretLength = secret.length;
+      const hiddenChars = bulletChar.repeat(secretLength - visibleCharsLength);
 
-    return hiddenString;
+      const hiddenString = hiddenChars.concat(visibleChars);
+
+      return hiddenString;
+    }
+  };
+
+  const handleReset = () => {
+    setForceUseEffect((prev) => !prev);
+    setOpened(false);
+    return;
   };
 
   return (
@@ -44,24 +60,51 @@ const Settings = () => {
           defaultValue={clientID}
           disabled
           rightSection={
-            <ActionIcon onClick={() => clipboard.copy(clientID)}>
-              <Copy size={24} />
-            </ActionIcon>
+            <Tooltip
+              label="Copied!"
+              gutter={10}
+              placement="center"
+              position="right"
+              radius="md"
+              transition="slide-right"
+              transitionDuration={200}
+              opened={clipboardID.copied}
+            >
+              <ActionIcon onClick={() => clipboardID.copy(clientID)}>
+                <Copy size={24} />
+              </ActionIcon>
+            </Tooltip>
           }
         />
       </InputWrapper>
+
+      <Space h="md" />
+
       <InputWrapper label="Client Secret">
         <Input
           style={{ width: "320px" }}
           defaultValue={toHiddenString(clientSecret)}
           disabled
           rightSection={
-            <ActionIcon onClick={() => clipboard.copy(clientSecret)}>
-              <Copy size={24} />
-            </ActionIcon>
+            <Tooltip
+              label="Copied!"
+              gutter={10}
+              placement="center"
+              position="right"
+              radius="md"
+              transition="slide-right"
+              transitionDuration={200}
+              opened={clipboardSecret.copied}
+            >
+              <ActionIcon onClick={() => clipboardSecret.copy(clientSecret)}>
+                <Copy size={24} />
+              </ActionIcon>
+            </Tooltip>
           }
         />
       </InputWrapper>
+
+      <Space h="md" />
 
       <Popover
         opened={opened}
@@ -71,16 +114,17 @@ const Settings = () => {
             Reset Client Secret
           </Button>
         }
-        width={180}
         position="bottom"
         placement="start"
         withArrow
       >
         <div>
-          <div>Are you sure?</div>
+          <div style={{ marginBottom: "10px" }}>Are you sure?</div>
           <div>
-            <Button variant="light">Yes</Button>
-            <Button variant="light" color="red">
+            <Button style={{ marginRight: "10px" }} onClick={handleReset}>
+              Yes
+            </Button>
+            <Button color="red" onClick={() => setOpened(false)}>
               No
             </Button>
           </div>
