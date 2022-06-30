@@ -6,12 +6,13 @@ const logger = require("./utils/logger");
 const config = require("./utils/config");
 const middleware = require("./utils/middleware");
 
+const loginRouter = require("./controllers/login");
+const applicationRouter = require("./controllers/application");
+
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-
-const loginRouter = require("./controllers/login");
 
 // Connect to database
 mongoose
@@ -27,6 +28,16 @@ mongoose
   });
 
 app.use("/api/login", loginRouter);
+
+// Handle token
+app.use(middleware.tokenExtractor);
+
+app.use(
+  "/api/application",
+  middleware.tokenValidator,
+  middleware.adminExtractor,
+  applicationRouter
+);
 
 // Handle errors
 app.use(middleware.unknownEndpoint);
