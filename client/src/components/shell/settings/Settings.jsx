@@ -12,7 +12,8 @@ import { useClipboard } from "@mantine/hooks";
 import { Copy } from "tabler-icons-react";
 
 import { useAuth } from "../../../contexts/AuthContext";
-import applicationService from "../../../services/application";
+import applicationInfoService from "../../../services/application/info";
+import applicationResetService from "../../../services/application/reset";
 
 const Settings = () => {
   const bulletChar = "\u2022";
@@ -25,7 +26,7 @@ const Settings = () => {
   const clipboardSecret = useClipboard();
 
   useEffect(() => {
-    applicationService.info(adminInfo?.token).then((response) => {
+    applicationInfoService.info(adminInfo?.token).then((response) => {
       setClientID(response.clientID);
       setClientSecret(response.clientSecret);
     });
@@ -45,9 +46,10 @@ const Settings = () => {
   };
 
   const handleReset = () => {
-    setForceUseEffect((prev) => !prev);
-    setOpened(false);
-    return;
+    applicationResetService.reset(adminInfo?.token).then((response) => {
+      setForceUseEffect((prev) => !prev);
+      setOpened(false);
+    });
   };
 
   return (
@@ -124,7 +126,11 @@ const Settings = () => {
             <Button style={{ marginRight: "10px" }} onClick={handleReset}>
               Yes
             </Button>
-            <Button color="red" onClick={() => setOpened(false)}>
+            <Button
+              color="red"
+              variant="light"
+              onClick={() => setOpened(false)}
+            >
               No
             </Button>
           </div>

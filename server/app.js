@@ -7,7 +7,8 @@ const config = require("./utils/config");
 const middleware = require("./utils/middleware");
 
 const loginRouter = require("./controllers/login");
-const applicationRouter = require("./controllers/application");
+const applicationInfoRouter = require("./controllers/application/info");
+const applicationResetRouter = require("./controllers/application/reset");
 
 const app = express();
 
@@ -32,11 +33,19 @@ app.use("/api/login", loginRouter);
 // Handle token
 app.use(middleware.tokenExtractor);
 
+// Admin Routes
 app.use(
-  "/api/application",
+  "/api/application/info",
   middleware.tokenValidator,
   middleware.adminExtractor,
-  applicationRouter
+  applicationInfoRouter
+);
+
+app.use(
+  "/api/application/reset",
+  middleware.tokenValidator,
+  middleware.adminExtractor,
+  applicationResetRouter
 );
 
 // Handle errors

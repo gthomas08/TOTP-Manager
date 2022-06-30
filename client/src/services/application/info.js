@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from "axios";
-const baseUrl = "/api/application";
+const baseUrl = "/api/application/info";
 
 // Get application info
 const info = async (token) => {
