@@ -9,6 +9,7 @@ const middleware = require("./utils/middleware");
 const loginRouter = require("./controllers/login");
 const applicationInfoRouter = require("./controllers/application/info");
 const applicationResetRouter = require("./controllers/application/reset");
+const userEnrollmentRouter = require("./controllers/user/enrollment");
 
 const app = express();
 
@@ -29,6 +30,7 @@ mongoose
   });
 
 app.use("/api/login", loginRouter);
+app.use("/api/user/enrollment", userEnrollmentRouter);
 
 // Handle token
 app.use(middleware.tokenExtractor);
