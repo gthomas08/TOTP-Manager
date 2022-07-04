@@ -21,14 +21,6 @@ const userSchema = mongoose.Schema({
   },
 });
 
-// Delete unwanted information
-userSchema.set("toJSON", {
-  transform: (document, returnedObject) => {
-    delete returnedObject._id;
-    delete returnedObject.__v;
-  },
-});
-
 userSchema.plugin(uniqueValidator);
 
 const User = mongoose.model("User", userSchema);

@@ -19,12 +19,12 @@ loginRouter.post("/", async (request, response) => {
     });
   }
 
-  const userForToken = {
+  const adminForToken = {
     username: admin.username,
     id: admin._id,
   };
 
-  const token = jwt.sign(userForToken, process.env.SECRET);
+  const token = jwt.sign(adminForToken, process.env.SECRET);
 
   return response.status(200).send({
     token,
