@@ -10,6 +10,8 @@ const loginRouter = require("./controllers/login");
 const applicationInfoRouter = require("./controllers/application/info");
 const applicationResetRouter = require("./controllers/application/reset");
 const userEnrollmentRouter = require("./controllers/user/enrollment");
+const usersShowRouter = require("./controllers/user/show");
+const usersDeleteRouter = require("./controllers/user/delete");
 
 const app = express();
 
@@ -48,6 +50,20 @@ app.use(
   middleware.tokenValidator,
   middleware.adminExtractor,
   applicationResetRouter
+);
+
+app.use(
+  "/api/users/show",
+  middleware.tokenValidator,
+  middleware.adminExtractor,
+  usersShowRouter
+);
+
+app.use(
+  "/api/users/delete",
+  middleware.tokenValidator,
+  middleware.adminExtractor,
+  usersDeleteRouter
 );
 
 // Handle errors

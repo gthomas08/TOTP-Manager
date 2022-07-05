@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   Checkbox,
@@ -9,42 +9,65 @@ import {
   Button,
   Group,
 } from "@mantine/core";
-import { Search } from "tabler-icons-react";
+import { useModals } from "@mantine/modals";
+import { showNotification } from "@mantine/notifications";
+import { Search, Check } from "tabler-icons-react";
 
-const data = [
-  { username: "user1", lastLogin: "17/07/2022" },
-  { username: "user2", lastLogin: "02/07/2022" },
-  { username: "user3", lastLogin: "03/07/2022" },
-  { username: "user4", lastLogin: "03/07/2022" },
-  { username: "user5", lastLogin: "03/07/2022" },
-  { username: "user6", lastLogin: "03/07/2022" },
-  { username: "user7", lastLogin: "03/07/2022" },
-  { username: "user8", lastLogin: "03/07/2022" },
-  { username: "user9", lastLogin: "03/07/2022" },
-  { username: "user10", lastLogin: "03/07/2022" },
-  { username: "user11", lastLogin: "03/07/2022" },
-  { username: "user12", lastLogin: "03/07/2022" },
-  { username: "user13", lastLogin: "03/07/2022" },
-  { username: "user14", lastLogin: "03/07/2022" },
-  { username: "user15", lastLogin: "03/07/2022" },
-  { username: "user16", lastLogin: "03/07/2022" },
-  { username: "user17", lastLogin: "03/07/2022" },
-  { username: "user18", lastLogin: "03/07/2022" },
-  { username: "user19", lastLogin: "03/07/2022" },
-  { username: "user20", lastLogin: "03/07/2022" },
-  { username: "user21", lastLogin: "03/07/2022" },
-  { username: "user22", lastLogin: "03/07/2022" },
-  { username: "user23", lastLogin: "03/07/2022" },
-  { username: "user24", lastLogin: "03/07/2022" },
-  { username: "user25", lastLogin: "03/07/2022" },
-  { username: "user26", lastLogin: "03/07/2022" },
-  { username: "user27", lastLogin: "03/07/2022" },
-];
+import { useAuth } from "../../../contexts/AuthContext";
+import usersShowService from "../../../services/users/show";
+import usersDeleteService from "../../../services/users/delete";
 
 const Users = () => {
-  const [selection, setSelection] = useState([]);
-  const [users, setUsers] = useState(data);
+  const { adminInfo } = useAuth();
   const { classes, cx } = useStyles();
+  const modals = useModals();
+
+  const [forceUseEffect, setForceUseEffect] = useState(false);
+  const [selection, setSelection] = useState([]);
+  const [data, setData] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    usersShowService.show(adminInfo?.token).then((response) => {
+      setData(response);
+      setUsers(response);
+    });
+  }, [adminInfo?.token, forceUseEffect]);
+
+  const handleDeleteUsers = () => {
+    usersDeleteService
+      .deleteUsers(adminInfo?.token, selection)
+      .then((response) => {
+        showNotification({
+          color: "teal",
+          title: `${
+            selection.length > 1 ? "Users" : "User"
+          } successfully deleted`,
+          icon: <Check />,
+        });
+        setForceUseEffect((prev) => !prev);
+        setSelection([]);
+      });
+  };
+
+  const openDeleteModal = () => {
+    return modals.openConfirmModal({
+      title: selection.length > 1 ? "Delete users" : "Delete user",
+      centered: true,
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete the selected{" "}
+          {selection.length > 1 ? "users" : "user"}?
+        </Text>
+      ),
+      labels: {
+        confirm: selection.length > 1 ? "Delete users" : "Delete user",
+        cancel: "Cancel",
+      },
+      confirmProps: { color: "red" },
+      onConfirm: handleDeleteUsers,
+    });
+  };
 
   const toggleRow = (username) =>
     setSelection((current) =>
@@ -81,7 +104,8 @@ const Users = () => {
           />
         </td>
         <td>{user.username}</td>
-        <td>{user.lastLogin}</td>
+        <td>{user.status}</td>
+        {/* <td>{user.lastLogin}</td> */}
       </tr>
     );
   });
@@ -97,7 +121,11 @@ const Users = () => {
             icon={<Search size={14} />}
             onChange={handleSearchChange}
           />
-          <Button color="red" disabled={selection.length > 0 ? false : true}>
+          <Button
+            color="red"
+            disabled={selection.length > 0 ? false : true}
+            onClick={openDeleteModal}
+          >
             Delete
           </Button>
         </Group>
@@ -118,14 +146,15 @@ const Users = () => {
                     />
                   </th>
                   <th>Username</th>
-                  <th>Last Login</th>
+                  <th>Status</th>
+                  {/* <th>Last Login</th> */}
                 </tr>
               </thead>
               <tbody>{rows}</tbody>
             </Table>
           </ScrollArea>
         ) : (
-          <Text align="center">No users found based on your search.</Text>
+          <Text align="center">No users found.</Text>
         )}
       </div>
     </>
