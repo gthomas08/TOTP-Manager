@@ -28,20 +28,6 @@ const tokenExtractor = (request, response, next) => {
   next();
 };
 
-// Validate token
-const tokenValidator = (request, response, next) => {
-  const { token } = request;
-  if (!token) {
-    return response.status(401).json({ error: "Token missing" });
-  }
-
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "Invalid token" });
-  }
-  next();
-};
-
 // Validate Admin from token
 const adminExtractor = async (request, response, next) => {
   const { token } = request;
@@ -59,6 +45,5 @@ module.exports = {
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
-  tokenValidator,
   adminExtractor,
 };

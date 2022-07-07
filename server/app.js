@@ -36,27 +36,14 @@ app.use("/api/users/enroll", userEnrollRouter);
 // Handle token
 app.use(middleware.tokenExtractor);
 
-// Admin Routes
-app.use(
-  "/api/application",
-  middleware.tokenValidator,
-  middleware.adminExtractor,
-  applicationRouter
-);
-
+// Routes used by admin
+app.use("/api/application", middleware.adminExtractor, applicationRouter);
 app.use(
   "/api/application/reset",
-  middleware.tokenValidator,
   middleware.adminExtractor,
   applicationResetRouter
 );
-
-app.use(
-  "/api/users/",
-  middleware.tokenValidator,
-  middleware.adminExtractor,
-  usersRouter
-);
+app.use("/api/users/", middleware.adminExtractor, usersRouter);
 
 // Handle errors
 app.use(middleware.unknownEndpoint);
