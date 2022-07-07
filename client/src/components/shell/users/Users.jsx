@@ -14,8 +14,7 @@ import { showNotification } from "@mantine/notifications";
 import { Search, Check } from "tabler-icons-react";
 
 import { useAuth } from "../../../contexts/AuthContext";
-import usersShowService from "../../../services/users/show";
-import usersDeleteService from "../../../services/users/delete";
+import usersService from "../../../services/users/users";
 
 const Users = () => {
   const { adminInfo } = useAuth();
@@ -28,26 +27,24 @@ const Users = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    usersShowService.show(adminInfo?.token).then((response) => {
+    usersService.getUsers(adminInfo?.token).then((response) => {
       setData(response);
       setUsers(response);
     });
   }, [adminInfo?.token, forceUseEffect]);
 
   const handleDeleteUsers = () => {
-    usersDeleteService
-      .deleteUsers(adminInfo?.token, selection)
-      .then((response) => {
-        showNotification({
-          color: "teal",
-          title: `${
-            selection.length > 1 ? "Users" : "User"
-          } successfully deleted`,
-          icon: <Check />,
-        });
-        setForceUseEffect((prev) => !prev);
-        setSelection([]);
+    usersService.deleteUsers(adminInfo?.token, selection).then((response) => {
+      showNotification({
+        color: "teal",
+        title: `${
+          selection.length > 1 ? "Users" : "User"
+        } successfully deleted`,
+        icon: <Check />,
       });
+      setForceUseEffect((prev) => !prev);
+      setSelection([]);
+    });
   };
 
   const openDeleteModal = () => {

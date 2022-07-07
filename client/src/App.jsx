@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
-import Login from "./components/auth/Login";
+import Login from "./components/authentication/Login";
 import Shell from "./components/shell/Shell";
 
 const App = () => {

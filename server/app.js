@@ -6,12 +6,11 @@ const logger = require("./utils/logger");
 const config = require("./utils/config");
 const middleware = require("./utils/middleware");
 
-const loginRouter = require("./controllers/login");
+const loginRouter = require("./controllers/authentication/login");
 const applicationInfoRouter = require("./controllers/application/info");
 const applicationResetRouter = require("./controllers/application/reset");
-const userEnrollmentRouter = require("./controllers/user/enrollment");
-const usersShowRouter = require("./controllers/user/show");
-const usersDeleteRouter = require("./controllers/user/delete");
+const usersRouter = require("./controllers/users/users");
+const userEnrollRouter = require("./controllers/users/enroll");
 
 const app = express();
 
@@ -32,7 +31,7 @@ mongoose
   });
 
 app.use("/api/login", loginRouter);
-app.use("/api/user/enrollment", userEnrollmentRouter);
+app.use("/api/users/enroll", userEnrollRouter);
 
 // Handle token
 app.use(middleware.tokenExtractor);
@@ -53,17 +52,10 @@ app.use(
 );
 
 app.use(
-  "/api/users/show",
+  "/api/users/",
   middleware.tokenValidator,
   middleware.adminExtractor,
-  usersShowRouter
-);
-
-app.use(
-  "/api/users/delete",
-  middleware.tokenValidator,
-  middleware.adminExtractor,
-  usersDeleteRouter
+  usersRouter
 );
 
 // Handle errors

@@ -12,7 +12,7 @@ import {
   Container,
   Button,
 } from "@mantine/core";
-import loginService from "../../services/login";
+import loginService from "../../services/authentication/login";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
