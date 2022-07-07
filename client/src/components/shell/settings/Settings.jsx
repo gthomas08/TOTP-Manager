@@ -12,7 +12,7 @@ import { useClipboard } from "@mantine/hooks";
 import { Copy } from "tabler-icons-react";
 
 import { useAuth } from "../../../contexts/AuthContext";
-import applicationInfoService from "../../../services/application/info";
+import applicationService from "../../../services/application/application";
 import applicationResetService from "../../../services/application/reset";
 
 const Settings = () => {
@@ -26,7 +26,7 @@ const Settings = () => {
   const clipboardSecret = useClipboard();
 
   useEffect(() => {
-    applicationInfoService.info(adminInfo?.token).then((response) => {
+    applicationService.getAppInfo(adminInfo?.token).then((response) => {
       setClientID(response.clientID);
       setClientSecret(response.clientSecret);
     });
@@ -46,10 +46,12 @@ const Settings = () => {
   };
 
   const handleReset = () => {
-    applicationResetService.reset(adminInfo?.token).then((response) => {
-      setForceUseEffect((prev) => !prev);
-      setOpened(false);
-    });
+    applicationResetService
+      .resetClientSecret(adminInfo?.token)
+      .then((response) => {
+        setForceUseEffect((prev) => !prev);
+        setOpened(false);
+      });
   };
 
   return (

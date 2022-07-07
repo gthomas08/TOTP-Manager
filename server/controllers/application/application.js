@@ -1,10 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-const applicationInfoRouter = require("express").Router();
+const applicationRouter = require("express").Router();
 const crypto = require("crypto");
 const Application = require("../../models/application");
 const encryption = require("../../utils/encryption");
 
-applicationInfoRouter.get("/", async (request, response) => {
+applicationRouter.get("/", async (request, response) => {
   const existingApplication = await Application.findOne({});
 
   // If the application is already created
@@ -54,4 +54,4 @@ applicationInfoRouter.get("/", async (request, response) => {
   return response.json(decryptedSavedApplication);
 });
 
-module.exports = applicationInfoRouter;
+module.exports = applicationRouter;
