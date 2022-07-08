@@ -2,6 +2,7 @@
 const jwt = require("jsonwebtoken");
 const logger = require("./logger");
 const Admin = require("../models/admin");
+const User = require("../models/user");
 
 // Handle unknown routes
 const unknownEndpoint = (request, response) => {
@@ -35,8 +36,23 @@ const adminExtractor = async (request, response, next) => {
   const admin = await Admin.findById(decodedToken.id);
 
   if (!admin) {
-    return response.status(401).json({ error: "Unauthorized access." });
+    return response.status(401).json({ error: "Admin unauthorized access." });
   }
+
+  next();
+};
+
+// Validate User from token
+const userExtractor = async (request, response, next) => {
+  const { token } = request;
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  const user = await User.findById(decodedToken.id);
+
+  if (!user) {
+    return response.status(401).json({ error: "User unauthorized access." });
+  }
+
+  request.username = user.username;
 
   next();
 };
@@ -46,4 +62,5 @@ module.exports = {
   errorHandler,
   tokenExtractor,
   adminExtractor,
+  userExtractor,
 };

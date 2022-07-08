@@ -7,10 +7,14 @@ const config = require("./utils/config");
 const middleware = require("./utils/middleware");
 
 const loginRouter = require("./controllers/authentication/login");
+
 const applicationRouter = require("./controllers/application/application");
 const applicationResetRouter = require("./controllers/application/reset");
+
 const usersRouter = require("./controllers/users/users");
-const userEnrollRouter = require("./controllers/users/enroll");
+const usersEnrollRouter = require("./controllers/users/enroll");
+
+const userLogRouter = require("./controllers/users/log");
 
 const app = express();
 
@@ -31,7 +35,7 @@ mongoose
   });
 
 app.use("/api/login", loginRouter);
-app.use("/api/users/enroll", userEnrollRouter);
+app.use("/api/users/enroll", usersEnrollRouter);
 
 // Handle token
 app.use(middleware.tokenExtractor);
@@ -44,6 +48,9 @@ app.use(
   applicationResetRouter
 );
 app.use("/api/users/", middleware.adminExtractor, usersRouter);
+
+// Routes used by users
+app.use("/api/user/log", middleware.userExtractor, userLogRouter);
 
 // Handle errors
 app.use(middleware.unknownEndpoint);
