@@ -30,4 +30,13 @@ const getUserInfo = async (token, username) => {
   return response.data;
 };
 
-export default { getUsers, deleteUsers, getUserInfo };
+// Reset token
+const resetToken = async (token, username) => {
+  const tokenToSend = `bearer ${token}`;
+  const response = await axios.put(`${baseUrl}/${username}`, null, {
+    headers: { Authorization: tokenToSend },
+  });
+  return response.data;
+};
+
+export default { getUsers, deleteUsers, getUserInfo, resetToken };

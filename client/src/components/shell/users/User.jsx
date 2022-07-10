@@ -1,7 +1,17 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Table, Space, ScrollArea, Button, Group, Badge } from "@mantine/core";
+import {
+  Table,
+  Space,
+  ScrollArea,
+  Button,
+  Group,
+  Badge,
+  Text,
+} from "@mantine/core";
 import { Check, X } from "tabler-icons-react";
+import { useModals } from "@mantine/modals";
+import { showNotification } from "@mantine/notifications";
 
 import usersService from "../../../services/users/users";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -9,15 +19,54 @@ import { useAuth } from "../../../contexts/AuthContext";
 const User = () => {
   const { user } = useParams();
   const { adminInfo } = useAuth();
+  const modals = useModals();
+
+  const [forceUseEffect, setForceUseEffect] = useState(false);
+
   const [logs, setLogs] = useState([]);
-  const [enrolled, setEnrolled] = useState();
+  const [enrolled, setEnrolled] = useState(true);
 
   useEffect(() => {
     usersService.getUserInfo(adminInfo?.token, user).then((response) => {
       setLogs(response.logs);
       setEnrolled(response.enrolled);
     });
-  }, [adminInfo?.token, user]);
+  }, [adminInfo?.token, user, forceUseEffect]);
+
+  const openDeleteModal = () => {
+    return modals.openConfirmModal({
+      title: "Reset token for user",
+      centered: true,
+      children: (
+        <>
+          <Text size="sm">
+            Are you sure you want to reset the token for the user?
+          </Text>
+          <Text size="sm">
+            {" "}
+            The user will have to setup the authenticator again.
+          </Text>
+        </>
+      ),
+      labels: {
+        confirm: "Reset Token",
+        cancel: "Cancel",
+      },
+      confirmProps: { color: "red" },
+      onConfirm: handleResetToken,
+    });
+  };
+
+  const handleResetToken = () => {
+    usersService.resetToken(adminInfo?.token, user).then((response) => {
+      showNotification({
+        color: "teal",
+        title: "Token successfully reset.",
+        icon: <Check />,
+      });
+      setForceUseEffect((prev) => !prev);
+    });
+  };
 
   const rows = logs.map((log) => {
     const date = new Date(log.date);
@@ -48,7 +97,9 @@ const User = () => {
         ) : (
           <Badge color="red">Not Enrolled</Badge>
         )}
-        <Button color="red">Reset Token</Button>
+        <Button color="red" onClick={openDeleteModal}>
+          Reset Token
+        </Button>
       </Group>
 
       <Space h="md" />

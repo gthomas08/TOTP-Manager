@@ -90,6 +90,8 @@ const Users = () => {
 
   const rows = users.map((user) => {
     const selected = selection.includes(user.username);
+    const date = new Date(user.lastLogin);
+
     return (
       <tr
         key={user.username}
@@ -108,7 +110,7 @@ const Users = () => {
           </Anchor>
         </td>
         <td>{user.status}</td>
-        {/* <td>{user.lastLogin}</td> */}
+        <td>{date.toString().split("(")[0]}</td>
       </tr>
     );
   });
@@ -150,7 +152,7 @@ const Users = () => {
                   </th>
                   <th>Username</th>
                   <th>Status</th>
-                  {/* <th>Last Login</th> */}
+                  <th>Last Login</th>
                 </tr>
               </thead>
               <tbody>{rows}</tbody>
