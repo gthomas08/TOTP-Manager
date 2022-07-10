@@ -21,4 +21,13 @@ const deleteUsers = async (token, users) => {
   return response.data;
 };
 
-export default { getUsers, deleteUsers };
+// Get user info
+const getUserInfo = async (token, username) => {
+  const tokenToSend = `bearer ${token}`;
+  const response = await axios.get(`${baseUrl}/${username}`, {
+    headers: { Authorization: tokenToSend },
+  });
+  return response.data;
+};
+
+export default { getUsers, deleteUsers, getUserInfo };

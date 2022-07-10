@@ -19,6 +19,12 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  logs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Log",
+    },
+  ],
 });
 
 userSchema.plugin(uniqueValidator);

@@ -6,12 +6,14 @@ import ShellHeader from "./ShellHeader";
 import ShellNavbar from "./ShellNavbar";
 import Dashboard from "./dashboard/Dashboard";
 import Users from "./users/Users";
+import User from "./users/User";
 import Settings from "./settings/Settings";
 
 const Shell = () => {
   const [opened, setOpened] = useState(false);
   const location = useLocation();
   useScrollLock(true);
+  const regex = new RegExp(/\/users\/\w+/);
 
   const renderCorrectComponent = (loc) => {
     const path = loc?.pathname;
@@ -20,6 +22,8 @@ const Shell = () => {
       return <Dashboard />;
     } else if (path === "/users") {
       return <Users />;
+    } else if (regex.test(path)) {
+      return <User />;
     } else if (path === "/settings") {
       return <Settings />;
     }

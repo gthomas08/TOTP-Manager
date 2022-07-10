@@ -26,4 +26,27 @@ usersRouter.delete("/", async (request, response) => {
   return response.sendStatus(204);
 });
 
+// Get user info
+usersRouter.get("/:username", async (request, response) => {
+  const { username } = request.params;
+  const user = await User.findOne({ username }).populate("logs");
+
+  if (!user) {
+    return response.sendStatus(404);
+  }
+
+  const formattedUser = {
+    username: user.username,
+    enrolled: user.enrolled,
+    logs: user.logs
+      .map((log) => ({
+        type: log.type,
+        date: log.date,
+      }))
+      .reverse(),
+  };
+
+  return response.json(formattedUser);
+});
+
 module.exports = usersRouter;

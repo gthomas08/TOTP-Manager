@@ -31,6 +31,10 @@ const App = () => {
         element={adminInfo ? <Shell /> : <Navigate to="/login" replace />}
       />
       <Route
+        path="/users/:user"
+        element={adminInfo ? <Shell /> : <Navigate to="/login" replace />}
+      />
+      <Route
         path="/settings"
         element={adminInfo ? <Shell /> : <Navigate to="/login" replace />}
       />

@@ -15,21 +15,29 @@ userLogRouter.post("/", async (request, response) => {
   const isValid = otplib.authenticator.check(body.totp, decryptedSeed);
 
   if (isValid) {
+    await User.updateOne({ username: user.username }, { enrolled: true });
+
     const log = new Log({
       type: "Granted",
       date: new Date(),
       user: user._id,
     });
 
-    await log.save();
-  } else {
+    const savedLog = await log.save();
+
+    user.logs = user.logs.concat(savedLog._id);
+    await user.save();
+  } else if (user.enrolled) {
     const log = new Log({
       type: "Denied",
       date: new Date(),
       user: user._id,
     });
 
-    await log.save();
+    const savedLog = await log.save();
+
+    user.logs = user.logs.concat(savedLog._id);
+    await user.save();
   }
 
   return response.sendStatus(200);

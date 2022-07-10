@@ -8,10 +8,12 @@ import {
   Text,
   Button,
   Group,
+  Anchor,
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { Search, Check } from "tabler-icons-react";
+import { Link } from "react-router-dom";
 
 import { useAuth } from "../../../contexts/AuthContext";
 import usersService from "../../../services/users/users";
@@ -100,7 +102,11 @@ const Users = () => {
             transitionDuration={0}
           />
         </td>
-        <td>{user.username}</td>
+        <td>
+          <Anchor component={Link} to={`/users/${user.username}`}>
+            {user.username}
+          </Anchor>
+        </td>
         <td>{user.status}</td>
         {/* <td>{user.lastLogin}</td> */}
       </tr>
