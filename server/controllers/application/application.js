@@ -6,6 +6,7 @@ const encryption = require("../../utils/encryption");
 
 applicationRouter.get("/", async (request, response) => {
   const existingApplication = await Application.findOne({});
+  const defaultAppName = "Shibboleth";
 
   // If the application is already created
   if (existingApplication) {
@@ -15,6 +16,7 @@ applicationRouter.get("/", async (request, response) => {
     );
 
     const decryptedExistingApplication = {
+      name: defaultAppName,
       clientID: existingApplication.clientID,
       clientSecret: decryptedClientSecret,
     };
@@ -33,6 +35,7 @@ applicationRouter.get("/", async (request, response) => {
 
   // Create application with credentials
   const application = new Application({
+    name: defaultAppName,
     clientID: randomUniqueClientID,
     clientSecret: encryptedClientSecret,
   });
@@ -47,6 +50,7 @@ applicationRouter.get("/", async (request, response) => {
 
   // Object to return
   const decryptedSavedApplication = {
+    name: defaultAppName,
     clientID: savedApplication.clientID,
     clientSecret: decryptedClientSecret,
   };

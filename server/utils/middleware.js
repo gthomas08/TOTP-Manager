@@ -4,6 +4,15 @@ const logger = require("./logger");
 const Admin = require("../models/admin");
 const User = require("../models/user");
 
+// Request logger
+const requestLogger = (request, response, next) => {
+  logger.info("Method:", request.method);
+  logger.info("Path:  ", request.path);
+  logger.info("Body:  ", request.body);
+  logger.info("---");
+  next();
+};
+
 // Handle unknown routes
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
@@ -58,6 +67,7 @@ const userExtractor = async (request, response, next) => {
 };
 
 module.exports = {
+  requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenExtractor,

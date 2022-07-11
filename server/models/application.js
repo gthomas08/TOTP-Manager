@@ -5,6 +5,11 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 // Create schema for application
 const applicationSchema = mongoose.Schema({
+  name: {
+    type: String,
+    unique: true,
+    required: true,
+  },
   clientID: {
     type: String,
     unique: true,

@@ -4,12 +4,15 @@ import {
   Button,
   Input,
   InputWrapper,
-  Popover,
   Tooltip,
   Space,
+  Text,
 } from "@mantine/core";
+import { Check } from "tabler-icons-react";
 import { useClipboard } from "@mantine/hooks";
 import { Copy } from "tabler-icons-react";
+import { useModals } from "@mantine/modals";
+import { showNotification } from "@mantine/notifications";
 
 import { useAuth } from "../../../contexts/AuthContext";
 import applicationService from "../../../services/application/application";
@@ -17,16 +20,21 @@ import applicationResetService from "../../../services/application/reset";
 
 const Settings = () => {
   const bulletChar = "\u2022";
-  const [opened, setOpened] = useState(false);
-  const [clientID, setClientID] = useState("");
-  const [clientSecret, setClientSecret] = useState("");
-  const [forceUseEffect, setForceUseEffect] = useState(false);
+
   const { adminInfo } = useAuth();
+  const modals = useModals();
+
   const clipboardID = useClipboard();
   const clipboardSecret = useClipboard();
 
+  const [clientID, setClientID] = useState("");
+  const [clientSecret, setClientSecret] = useState("");
+  const [appName, setAppName] = useState("");
+  const [forceUseEffect, setForceUseEffect] = useState(false);
+
   useEffect(() => {
     applicationService.getAppInfo(adminInfo?.token).then((response) => {
+      setAppName(response.name);
       setClientID(response.clientID);
       setClientSecret(response.clientSecret);
     });
@@ -45,12 +53,36 @@ const Settings = () => {
     }
   };
 
+  const openResetModal = () => {
+    return modals.openConfirmModal({
+      title: "Reset Client Secret",
+      centered: true,
+      children: (
+        <>
+          <Text size="sm">
+            Are you sure you want to reset the client secret?
+          </Text>
+        </>
+      ),
+      labels: {
+        confirm: "Reset Client Secret",
+        cancel: "Cancel",
+      },
+      confirmProps: { color: "red" },
+      onConfirm: handleReset,
+    });
+  };
+
   const handleReset = () => {
     applicationResetService
       .resetClientSecret(adminInfo?.token)
       .then((response) => {
+        showNotification({
+          color: "teal",
+          title: "Client secret successfully reset.",
+          icon: <Check />,
+        });
         setForceUseEffect((prev) => !prev);
-        setOpened(false);
       });
   };
 
@@ -58,6 +90,7 @@ const Settings = () => {
     <>
       <h1>Settings</h1>
       <h2>Details</h2>
+      <h3>Application Name: {appName}</h3>
       <InputWrapper label="Client ID">
         <Input
           style={{ width: "320px" }}
@@ -110,34 +143,9 @@ const Settings = () => {
 
       <Space h="md" />
 
-      <Popover
-        opened={opened}
-        onClose={() => setOpened(false)}
-        target={
-          <Button color="red" onClick={() => setOpened((o) => !o)}>
-            Reset Client Secret
-          </Button>
-        }
-        position="bottom"
-        placement="start"
-        withArrow
-      >
-        <div>
-          <div style={{ marginBottom: "10px" }}>Are you sure?</div>
-          <div>
-            <Button style={{ marginRight: "10px" }} onClick={handleReset}>
-              Yes
-            </Button>
-            <Button
-              color="red"
-              variant="light"
-              onClick={() => setOpened(false)}
-            >
-              No
-            </Button>
-          </div>
-        </div>
-      </Popover>
+      <Button color="red" onClick={openResetModal}>
+        Reset Client Secret
+      </Button>
     </>
   );
 };
