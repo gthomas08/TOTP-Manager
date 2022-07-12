@@ -4,7 +4,7 @@
 
 ## About The Project
 
-This project is part of the Computer Engineering and Informatics Department (CEID) of University of Patras Thesis. It features a platform that an admin can use to manage TOTP enrollements. This project is directly integrated with the [Sibboleth IdP V4.2.1](https://shibboleth.atlassian.net/wiki/spaces/IDP4/overview?homepageId=1265631498) and its [TOTP Plugin](https://shibboleth.atlassian.net/wiki/spaces/IDPPLUGINS/pages/1376878877/TOTP).
+This project is part of the Computer Engineering and Informatics Department (CEID) of University of Patras Thesis. It features a platform that an admin can use to manage TOTP enrollements. This project is directly integrated with the [Sibboleth IdP V4.2.1+](https://shibboleth.atlassian.net/wiki/spaces/IDP4/overview?homepageId=1265631498) and its [TOTP Plugin](https://shibboleth.atlassian.net/wiki/spaces/IDPPLUGINS/pages/1376878877/TOTP). Visit [Wiki](https://github.com/GTS08/TOTP-Manager/wiki) to integrate TOTP Manager with Shibboleth IdP.
 
 ### Built With
 
@@ -90,3 +90,5 @@ Start by creating an admin under Admin Collection in the database with the follo
 To generate a passwordHash, you can use an online [bcrypt generator](https://bcrypt-generator.com/).
 
 Once an admin is created, visit http://localhost:3000/ to log in with the admin credentials.
+
+Visit [Wiki](https://github.com/GTS08/TOTP-Manager/wiki) to integrate TOTP Manager with Shibboleth IdP.
