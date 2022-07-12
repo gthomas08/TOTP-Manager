@@ -1,12 +1,12 @@
 /* eslint-disable no-underscore-dangle */
-const usersEnrollRouter = require("express").Router();
+const usersEnrollmentRouter = require("express").Router();
 const jwt = require("jsonwebtoken");
 const otplib = require("otplib");
 const Application = require("../../models/application");
 const User = require("../../models/user");
 const encryption = require("../../utils/encryption");
 
-usersEnrollRouter.get("/:username", async (request, response) => {
+usersEnrollmentRouter.get("/:username", async (request, response) => {
   const { username } = request.params;
 
   const authorization = request.get("authorization");
@@ -111,4 +111,4 @@ usersEnrollRouter.get("/:username", async (request, response) => {
   });
 });
 
-module.exports = usersEnrollRouter;
+module.exports = usersEnrollmentRouter;

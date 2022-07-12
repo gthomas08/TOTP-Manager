@@ -14,7 +14,7 @@ const applicationRouter = require("./controllers/application/application");
 const applicationResetRouter = require("./controllers/application/reset");
 
 const usersRouter = require("./controllers/users/users");
-const usersEnrollRouter = require("./controllers/users/enroll");
+const usersEnrollmentRouter = require("./controllers/users/enrollment");
 
 const userLogRouter = require("./controllers/users/log");
 
@@ -38,7 +38,7 @@ mongoose
   });
 
 app.use("/api/login", loginRouter);
-app.use("/api/users/enroll", usersEnrollRouter);
+app.use("/api/users/enrollment", usersEnrollmentRouter);
 
 // Handle token
 app.use(middleware.tokenExtractor);

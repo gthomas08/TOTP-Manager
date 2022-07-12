@@ -112,7 +112,7 @@ const Users = () => {
           </Anchor>
         </td>
         <td>{user.status}</td>
-        <td>{date.toString().split("(")[0]}</td>
+        <td>{user.lastLogin ? date.toString().split("(")[0] : "-"}</td>
       </tr>
     );
   });

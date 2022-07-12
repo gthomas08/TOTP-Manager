@@ -12,7 +12,7 @@ usersRouter.get("/", async (request, response) => {
   const formattedUsers = users.map((user) => ({
     username: user.username,
     status: user.enrolled ? "Enrolled" : "Not Enrolled",
-    lastLogin: user.logs[user.logs.length - 1].date,
+    lastLogin: user.logs[user.logs.length - 1]?.date,
   }));
 
   return response.json(formattedUsers);
@@ -40,7 +40,7 @@ usersRouter.delete("/", async (request, response) => {
     },
   });
 
-  return response.sendStatus(204);
+  return response.sendStatus(200);
 });
 
 // Get user info
