@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
+  Title,
   Table,
   Space,
   ScrollArea,
@@ -90,7 +91,18 @@ const User = () => {
 
   return (
     <>
-      <h1>{user}</h1>
+      <Title
+        order={1}
+        style={{
+          fontFamily: "Sans Serif",
+          fontWeight: 500,
+        }}
+      >
+        {user}
+      </Title>
+
+      <Space h="md" />
+
       <Group style={{ width: 800 }} position="apart">
         {enrolled ? (
           <Badge color="green">Enrolled</Badge>

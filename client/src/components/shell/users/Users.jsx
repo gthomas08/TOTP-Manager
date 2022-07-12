@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import {
+  Title,
+  Space,
   Table,
   Checkbox,
   ScrollArea,
@@ -117,7 +119,18 @@ const Users = () => {
 
   return (
     <>
-      <h1>Users</h1>
+      <Title
+        order={1}
+        style={{
+          fontFamily: "Sans Serif",
+          fontWeight: 500,
+        }}
+      >
+        Users
+      </Title>
+
+      <Space h="md" />
+
       <div style={{ width: 800 }}>
         <Group position="apart">
           <TextInput

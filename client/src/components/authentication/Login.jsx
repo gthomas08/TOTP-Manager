@@ -49,10 +49,10 @@ const Login = () => {
       <Container size={420} my={40}>
         <Title
           align="center"
-          sx={(theme) => ({
-            fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+          style={{
+            fontFamily: "Sans Serif",
             fontWeight: 900,
-          })}
+          }}
         >
           TOTP Manager
         </Title>

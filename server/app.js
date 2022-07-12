@@ -8,6 +8,8 @@ const middleware = require("./utils/middleware");
 
 const loginRouter = require("./controllers/authentication/login");
 
+const dashboardRouter = require("./controllers/dashboard/dashboard");
+
 const applicationRouter = require("./controllers/application/application");
 const applicationResetRouter = require("./controllers/application/reset");
 
@@ -42,6 +44,7 @@ app.use("/api/users/enroll", usersEnrollRouter);
 app.use(middleware.tokenExtractor);
 
 // Routes used by admin
+app.use("/api/dashboard", middleware.adminExtractor, dashboardRouter);
 app.use("/api/application", middleware.adminExtractor, applicationRouter);
 app.use(
   "/api/application/reset",

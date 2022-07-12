@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import {
+  Title,
   ActionIcon,
   Button,
   Input,
@@ -45,9 +46,6 @@ const Settings = () => {
   const form = useForm({
     initialValues: {
       name: appName,
-    },
-    validationRules: {
-      name: (value) => value.trim().length > 0,
     },
   });
 
@@ -116,8 +114,18 @@ const Settings = () => {
 
   return (
     <>
-      <h1>Settings</h1>
-      <h2>Details</h2>
+      <Title
+        order={1}
+        style={{
+          fontFamily: "Sans Serif",
+          fontWeight: 500,
+        }}
+      >
+        Settings
+      </Title>
+
+      <Space h="md" />
+
       <Group>
         <Popover
           opened={opened}
