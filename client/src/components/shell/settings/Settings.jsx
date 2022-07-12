@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import {
   ActionIcon,
@@ -7,9 +8,14 @@ import {
   Tooltip,
   Space,
   Text,
+  Popover,
+  Group,
+  TextInput,
+  Anchor,
+  useMantineTheme,
 } from "@mantine/core";
-import { Check } from "tabler-icons-react";
-import { useClipboard } from "@mantine/hooks";
+import { Check, Edit } from "tabler-icons-react";
+import { useClipboard, useForm } from "@mantine/hooks";
 import { Copy } from "tabler-icons-react";
 import { useModals } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
@@ -27,18 +33,40 @@ const Settings = () => {
   const clipboardID = useClipboard();
   const clipboardSecret = useClipboard();
 
+  const theme = useMantineTheme();
+
   const [clientID, setClientID] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   const [appName, setAppName] = useState("");
+
+  const [opened, setOpened] = useState(false);
   const [forceUseEffect, setForceUseEffect] = useState(false);
+
+  const form = useForm({
+    initialValues: {
+      name: appName,
+    },
+    validationRules: {
+      name: (value) => value.trim().length > 0,
+    },
+  });
 
   useEffect(() => {
     applicationService.getAppInfo(adminInfo?.token).then((response) => {
       setAppName(response.name);
       setClientID(response.clientID);
       setClientSecret(response.clientSecret);
+      form.setFieldValue("name", response.name);
     });
   }, [adminInfo?.token, forceUseEffect]);
+
+  const onSubmit = () => {
+    applicationService.changeName(adminInfo?.token, {
+      name: form.values.name,
+    });
+    setOpened(false);
+    setForceUseEffect((prev) => !prev);
+  };
 
   const toHiddenString = (secret) => {
     if (secret.length > 0) {
@@ -90,7 +118,63 @@ const Settings = () => {
     <>
       <h1>Settings</h1>
       <h2>Details</h2>
-      <h3>Application Name: {appName}</h3>
+      <Group>
+        <Popover
+          opened={opened}
+          onClose={() => setOpened(false)}
+          position="bottom"
+          placement="start"
+          withCloseButton
+          title="Edit Name"
+          transition="pop-top-left"
+          target={
+            <ActionIcon
+              variant={theme.colorScheme === "dark" ? "hover" : "light"}
+              onClick={() => setOpened((o) => !o)}
+            >
+              <Edit size={16} />
+            </ActionIcon>
+          }
+        >
+          <form onSubmit={form.onSubmit(onSubmit)}>
+            <TextInput
+              required
+              label="Name"
+              placeholder="Name"
+              style={{ minWidth: 300 }}
+              value={form.values.name}
+              onChange={(event) =>
+                form.setFieldValue("name", event.currentTarget.value)
+              }
+              error={form.errors.name}
+              variant="default"
+            />
+
+            <Group position="apart" style={{ marginTop: 15 }}>
+              <Anchor
+                component="button"
+                color="gray"
+                size="sm"
+                onClick={() => setOpened(false)}
+              >
+                Cancel
+              </Anchor>
+              <Button type="submit" size="sm">
+                Save
+              </Button>
+            </Group>
+          </form>
+        </Popover>
+        <div>
+          <Text>Application Name</Text>
+          <Text size="xs" color="gray">
+            {appName}
+          </Text>
+        </div>
+      </Group>
+
+      <Space h="md" />
+
       <InputWrapper label="Client ID">
         <Input
           style={{ width: "320px" }}

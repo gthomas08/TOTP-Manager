@@ -52,7 +52,7 @@ usersEnrollRouter.get("/:username", async (request, response) => {
     // If the user is not enrolled
     if (!existingdUser.enrolled) {
       // Generate QR Code
-      const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=otpauth%3A%2F%2Ftotp%2F${application.name}%3A${existingdUser.username}%3Fsecret%3D${decryptedSeed}%26issuer%3DShibboleth&size=200x200&ecc=M&margin=0`;
+      const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=otpauth%3A%2F%2Ftotp%2F${application.name}%3A${existingdUser.username}%3Fsecret%3D${decryptedSeed}%26issuer%3D${application.name}&size=200x200&ecc=M&margin=0`;
 
       // Return json with QR Code
       return response.json({
@@ -99,7 +99,7 @@ usersEnrollRouter.get("/:username", async (request, response) => {
   const token = jwt.sign(userForToken, process.env.SECRET);
 
   // Generate QR Code
-  const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=otpauth%3A%2F%2Ftotp%2FShibboleth%3A${savedUser.username}%3Fsecret%3D${decryptedSeed}%26issuer%3DShibboleth&size=200x200&ecc=M&margin=0`;
+  const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=otpauth%3A%2F%2Ftotp%2F${application.name}%3A${savedUser.username}%3Fsecret%3D${decryptedSeed}%26issuer%3D${application.name}&size=200x200&ecc=M&margin=0`;
 
   // Return json
   return response.json({

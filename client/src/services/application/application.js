@@ -11,4 +11,13 @@ const getAppInfo = async (token) => {
   return response.data;
 };
 
-export default { getAppInfo };
+// Change application name
+const changeName = async (token, body) => {
+  const tokenToSend = `bearer ${token}`;
+  const response = await axios.put(baseUrl, body, {
+    headers: { Authorization: tokenToSend },
+  });
+  return response.data;
+};
+
+export default { getAppInfo, changeName };

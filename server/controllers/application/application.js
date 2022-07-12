@@ -16,7 +16,7 @@ applicationRouter.get("/", async (request, response) => {
     );
 
     const decryptedExistingApplication = {
-      name: defaultAppName,
+      name: existingApplication.name,
       clientID: existingApplication.clientID,
       clientSecret: decryptedClientSecret,
     };
@@ -50,12 +50,20 @@ applicationRouter.get("/", async (request, response) => {
 
   // Object to return
   const decryptedSavedApplication = {
-    name: defaultAppName,
+    name: savedApplication.name,
     clientID: savedApplication.clientID,
     clientSecret: decryptedClientSecret,
   };
 
   return response.json(decryptedSavedApplication);
+});
+
+applicationRouter.put("/", async (request, response) => {
+  const { name } = request.body;
+
+  await Application.findOneAndUpdate({}, { name });
+
+  return response.sendStatus(200);
 });
 
 module.exports = applicationRouter;
