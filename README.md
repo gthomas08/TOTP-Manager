@@ -76,23 +76,6 @@ For more information on how to install MongoDB, visit [MongoDB](https://www.mong
    npm start
    ```
 
-#### Production
-
-1. ```sh
-   wget https://github.com/GTS08/TOTP-Manager/releases/download/release/totp_manager_release.tar.gz
-   tar -xzf totp_manager_release.tar.gz
-   cd totp_manager_release
-   ```
-2. Set the environmental variables in .env file
-
-   ```sh
-   MONGODB_URI=<MONGODB_URI>
-   PORT=3001
-   SECRET=<secret_key_for_token>
-   ENCRYPTION_KEY=<32_byte_random_string>
-   ENCRYPTION_VECTOR=<16_byte_random_string>
-   ```
-
 <!-- USAGE EXAMPLES -->
 
 ## Usage
@@ -111,3 +94,31 @@ To generate a passwordHash, you can use an online [bcrypt generator](https://bcr
 Once an admin is created, visit http://localhost:3000/ to log in with the admin credentials.
 
 Visit [Wiki](https://github.com/GTS08/TOTP-Manager/wiki) to integrate TOTP Manager with Shibboleth IdP.
+
+## Production
+
+1. ```sh
+   wget https://github.com/GTS08/TOTP-Manager/releases/download/release/totp_manager_release.tar.gz
+   tar -xzf totp_manager_release.tar.gz
+   cd totp_manager_release
+   ```
+2. Set the environmental variables in .env file
+
+   ```sh
+   MONGODB_URI=<MONGODB_URI>
+   PORT=3001
+   SECRET=<secret_key_for_token>
+   ENCRYPTION_KEY=<32_byte_random_string>
+   ENCRYPTION_VECTOR=<16_byte_random_string>
+   ```
+
+3. Install npm packages
+
+   ```sh
+   npm install
+   ```
+
+4. Start the server
+   ```sh
+   npm start
+   ```
