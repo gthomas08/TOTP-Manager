@@ -33,6 +33,8 @@ For more information on how to install MongoDB, visit [MongoDB](https://www.mong
 
 ### Installation
 
+#### Development
+
 1. Setup a local database. More information in [MongoDB](https://www.mongodb.com) website.
 
 2. Clone the repo
@@ -72,6 +74,23 @@ For more information on how to install MongoDB, visit [MongoDB](https://www.mong
 9. Start react app
    ```sh
    npm start
+   ```
+
+#### Production
+
+1. ```sh
+   wget https://github.com/GTS08/TOTP-Manager/releases/download/release/totp_manager_release.tar.gz
+   tar -xzf totp_manager_release.tar.gz
+   cd totp_manager_release
+   ```
+2. Set the environmental variables in .env file
+
+   ```sh
+   MONGODB_URI=<MONGODB_URI>
+   PORT=3001
+   SECRET=<secret_key_for_token>
+   ENCRYPTION_KEY=<32_byte_random_string>
+   ENCRYPTION_VECTOR=<16_byte_random_string>
    ```
 
 <!-- USAGE EXAMPLES -->
