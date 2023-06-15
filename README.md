@@ -1,5 +1,9 @@
 # TOTP Manager (Shibboleth Integration)
 
+![TOTP Manager Users](/screenshots/totp_manager_users.png)
+
+More screenshots can be found [here](screenshots/).
+
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
